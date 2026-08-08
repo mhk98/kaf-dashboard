@@ -961,7 +961,7 @@ function App() {
     fd.append("linkUrl", data.link || "");
     fd.append("categoryId", data.categoryId || "");
     fd.append("categoryName", data.category || "");
-    fd.append("alt", data.imageText || data.category || "");
+    fd.append("alt", data.alt || data.imageText || data.category || "");
     fd.append("status", data.status ? "Active" : "Inactive");
     if (data.sortOrder || data.sortOrder === 0) {
       fd.append("sortOrder", data.sortOrder);

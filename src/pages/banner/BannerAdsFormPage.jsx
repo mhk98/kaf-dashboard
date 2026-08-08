@@ -8,6 +8,8 @@ export default function BannerAdsFormPage({ mode = 'create', banner, categories,
     imageName: banner?.imageName ?? '',
     imageFile: null,
     imageText: banner?.imageText ?? '',
+    alt: banner?.imageText ?? banner?.alt ?? '',
+    sortOrder: banner?.sortOrder ?? 0,
     imageColor: banner?.imageColor ?? 'linear-gradient(135deg, #c5bfb4, #33302c)',
     status: banner?.status ?? true,
   });
@@ -34,9 +36,10 @@ export default function BannerAdsFormPage({ mode = 'create', banner, categories,
         imageName: form.imageName,
         imageFile: form.imageFile,
         imageText: form.imageText,
+        alt: form.alt.trim(),
+        sortOrder: Number(form.sortOrder) || 0,
         imageColor: form.imageColor,
         status: form.status,
-        sortOrder: banner?.sortOrder ?? null,
       });
       onNavigate('banner_ads');
     } catch (err) {
@@ -67,6 +70,28 @@ export default function BannerAdsFormPage({ mode = 'create', banner, categories,
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-6">
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-gray-500">Title / Alt text</span>
+            <input
+              type="text"
+              value={form.alt}
+              onChange={(e) => setField('alt', e.target.value)}
+              placeholder="Example: Summer collection"
+              className="h-9 w-full rounded border border-gray-300 bg-white px-3 text-sm text-gray-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-gray-500">Display order</span>
+            <input
+              type="number"
+              min="0"
+              value={form.sortOrder}
+              onChange={(e) => setField('sortOrder', e.target.value)}
+              className="h-9 w-full rounded border border-gray-300 bg-white px-3 text-sm text-gray-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            />
+          </label>
+
           <label className="block">
             <span className="mb-2 block text-sm font-semibold text-gray-500">link *</span>
             <input
