@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   Bold, Underline, Italic, AlignLeft, List, ListOrdered,
   Link, Image, Film, Maximize2, Code, HelpCircle,
+  Plus, Trash2, MapPin,
 } from 'lucide-react';
 import { siteSettingService } from '../../services/websiteService';
 import { applyDocumentFavicon, normalizeSettingData } from '../../utils/siteBranding';
@@ -15,8 +16,14 @@ const DEFAULT = {
   scrollText: '', metaTitle: '', metaKeyword: '', metaDescription: '',
   marqueeText: '',
   bkashNumber: '', nagadNumber: '', rocketNumber: '',
+  storeLocations: [],
   orderBlockLimit: '', blockTime: '', timeUnit: 'Hour', status: true,
 };
+
+const emptyStore = () => ({
+  id: `store-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+  name: '', address: '', hotline: '', mapEmbedUrl: '', mapLink: '', active: true,
+});
 
 function normalizeSettings(data = {}) {
   const next = { ...DEFAULT, ...normalizeSettingData(data) };
@@ -96,6 +103,18 @@ export default function WebsiteGeneralSettingPage() {
   }, []);
 
   function set(f, v) { setForm((p) => ({ ...p, [f]: v })); }
+  function addStore() {
+    setForm((p) => ({ ...p, storeLocations: [...(p.storeLocations || []), emptyStore()] }));
+  }
+  function updateStore(index, field, value) {
+    setForm((p) => ({
+      ...p,
+      storeLocations: (p.storeLocations || []).map((store, i) => i === index ? { ...store, [field]: value } : store),
+    }));
+  }
+  function removeStore(index) {
+    setForm((p) => ({ ...p, storeLocations: (p.storeLocations || []).filter((_, i) => i !== index) }));
+  }
   function setLogo(v) {
     setForm((p) => ({ ...p, whiteLogo: v, logoFile: v }));
   }
@@ -222,6 +241,41 @@ export default function WebsiteGeneralSettingPage() {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-blue-400" />
             </div>
           </div>
+
+          <section className="rounded-xl border border-gray-200 bg-gray-50/60 p-4 sm:p-5">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="flex items-center gap-2 text-sm font-bold text-gray-800"><MapPin size={17} className="text-teal-600" /> Store Locations</h2>
+                <p className="mt-1 text-xs text-gray-500">Frontend Stores page-এ outlet address, hotline এবং Google Map দেখাবে।</p>
+              </div>
+              <button type="button" onClick={addStore} className="inline-flex items-center gap-1.5 rounded-lg bg-teal-500 px-3 py-2 text-xs font-semibold text-white transition hover:bg-teal-600">
+                <Plus size={15} /> Add Store
+              </button>
+            </div>
+
+            {(form.storeLocations || []).length === 0 && (
+              <div className="rounded-lg border border-dashed border-gray-300 bg-white px-4 py-6 text-center text-xs text-gray-500">No store added yet. Click “Add Store”.</div>
+            )}
+
+            <div className="space-y-4">
+              {(form.storeLocations || []).map((store, index) => (
+                <div key={store.id || index} className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-gray-700">Store #{index + 1}</h3>
+                    <button type="button" onClick={() => removeStore(index)} className="rounded-lg p-2 text-red-500 transition hover:bg-red-50" aria-label={`Remove store ${index + 1}`}><Trash2 size={16} /></button>
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div><label className="mb-1 block text-xs font-medium text-gray-600">Store Name *</label><input required value={store.name || ''} onChange={(e) => updateStore(index, 'name', e.target.value)} placeholder="Mirpur 1 (Dhaka)" className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-teal-400 focus:outline-none" /></div>
+                    <div><label className="mb-1 block text-xs font-medium text-gray-600">Outlet Hotline</label><input value={store.hotline || ''} onChange={(e) => updateStore(index, 'hotline', e.target.value)} placeholder="01332502911" className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-teal-400 focus:outline-none" /></div>
+                    <div className="md:col-span-2"><label className="mb-1 block text-xs font-medium text-gray-600">Address *</label><textarea required rows={2} value={store.address || ''} onChange={(e) => updateStore(index, 'address', e.target.value)} placeholder="Full outlet address" className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-teal-400 focus:outline-none" /></div>
+                    <div><label className="mb-1 block text-xs font-medium text-gray-600">Google Map Embed URL</label><input value={store.mapEmbedUrl || ''} onChange={(e) => updateStore(index, 'mapEmbedUrl', e.target.value)} placeholder="https://www.google.com/maps/embed?..." className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-teal-400 focus:outline-none" /></div>
+                    <div><label className="mb-1 block text-xs font-medium text-gray-600">Google Map Link</label><input value={store.mapLink || ''} onChange={(e) => updateStore(index, 'mapLink', e.target.value)} placeholder="https://maps.google.com/..." className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-teal-400 focus:outline-none" /></div>
+                  </div>
+                  <label className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-gray-600"><input type="checkbox" checked={store.active !== false} onChange={(e) => updateStore(index, 'active', e.target.checked)} className="h-4 w-4 accent-teal-500" /> Active</label>
+                </div>
+              ))}
+            </div>
+          </section>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
