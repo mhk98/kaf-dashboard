@@ -61,6 +61,7 @@ import WebsiteGeneralSettingPage from "./pages/website/WebsiteGeneralSettingPage
 import WebsiteOrderBlockPage from "./pages/website/WebsiteOrderBlockPage";
 import WebsiteFooterPage from "./pages/website/WebsiteFooterPage";
 import WebsiteSocialMediaPage from "./pages/website/WebsiteSocialMediaPage";
+import WebsiteFloatingContactPage from "./pages/website/WebsiteFloatingContactPage";
 import WebsiteContactPage from "./pages/website/WebsiteContactPage";
 import WebsiteShippingChargePage from "./pages/website/WebsiteShippingChargePage";
 import WebsiteShippingChargeEditPage from "./pages/website/WebsiteShippingChargeEditPage";
@@ -1797,6 +1798,8 @@ function App() {
       if (activeWebsitePage === "website_footer") return <WebsiteFooterPage />;
       if (activeWebsitePage === "social_media")
         return <WebsiteSocialMediaPage />;
+      if (activeWebsitePage === "floating_contact")
+        return <WebsiteFloatingContactPage />;
       if (activeWebsitePage === "contact") return <WebsiteContactPage />;
       if (activeWebsitePage === "shipping_charge") {
         return (

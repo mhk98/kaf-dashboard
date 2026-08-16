@@ -4,7 +4,7 @@ import { siteSettingService } from '../../services/websiteService';
 const SETTING_TYPE = 'social_media';
 
 const DEFAULT_PLATFORMS = [
-  { key: 'facebook',  label: 'Facebook',    url: '', active: true  },
+  { key: 'facebook',  label: 'Facebook',    url: '', followers: '', following: '', active: true  },
   { key: 'instagram', label: 'Instagram',   url: '', active: true  },
   { key: 'youtube',   label: 'YouTube',     url: '', active: true  },
   { key: 'whatsapp',  label: 'WhatsApp',    url: '', active: true  },
@@ -36,6 +36,7 @@ export default function WebsiteSocialMediaPage() {
   }, []);
 
   function setUrl(key, val)    { setPlatforms((prev) => prev.map((p) => p.key === key ? { ...p, url: val }          : p)); }
+  function setMeta(key, field, val) { setPlatforms((prev) => prev.map((p) => p.key === key ? { ...p, [field]: val } : p)); }
   function toggleStatus(key)   { setPlatforms((prev) => prev.map((p) => p.key === key ? { ...p, active: !p.active } : p)); }
 
   async function handleSubmit(e) {
@@ -79,6 +80,16 @@ export default function WebsiteSocialMediaPage() {
               <div className="px-6 py-4">
                 <input type="text" value={p.url} onChange={(e) => setUrl(p.key, e.target.value)}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400" />
+                {p.key === 'facebook' && (
+                  <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    <input type="text" value={p.followers || ''} onChange={(e) => setMeta(p.key, 'followers', e.target.value)}
+                      placeholder="Followers, e.g. 936K" aria-label="Facebook followers"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400" />
+                    <input type="text" value={p.following || ''} onChange={(e) => setMeta(p.key, 'following', e.target.value)}
+                      placeholder="Following, e.g. 1" aria-label="Facebook following"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400" />
+                  </div>
+                )}
               </div>
               <div className="px-6 py-4 flex justify-center">
                 <button type="button" onClick={() => toggleStatus(p.key)}

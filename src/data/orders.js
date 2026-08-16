@@ -84,7 +84,7 @@ export const ordersData = Array.from({ length: 182 }, (_, i) => {
   const statusKey = statusKeys[i % statusKeys.length];
   const bill = randomBetween(500, 5000);
   const advance = randomBetween(0, 200);
-  const orderId = `WZ-${100 + i}`;
+  const orderId = `KAF-${100 + i}`;
   const date = new Date('2026-05-01');
   date.setDate(date.getDate() + Math.floor(i / 3));
   const dateStr = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
