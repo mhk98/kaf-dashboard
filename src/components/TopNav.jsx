@@ -301,7 +301,7 @@ export default function TopNav({
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 flex flex-wrap items-center justify-between gap-2 px-3 py-2 sticky top-0 z-10 shadow-sm sm:px-4">
+    <header className="bg-[#fff8e7] border-b border-amber-100 flex flex-wrap items-center justify-between gap-2 px-3 py-2 sticky top-0 z-10 shadow-sm sm:px-4">
       {/* Left */}
       <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
         <button
@@ -313,20 +313,13 @@ export default function TopNav({
           <Menu size={20} className="text-gray-600" />
         </button>
 
-        {(logo || siteName) && (
-          <div className="hidden sm:flex items-center gap-2 pr-2 border-r border-gray-200">
-            {logo && (
-              <img
-                src={logo}
-                alt={siteName || "Logo"}
-                className="h-8 w-8 rounded-full object-cover border border-gray-200"
-              />
-            )}
-            {siteName && (
-              <span className="text-sm font-bold text-gray-800 max-w-[120px] truncate">
-                {siteName}
-              </span>
-            )}
+        {logo && (
+          <div className="hidden sm:flex items-center pr-2 border-r border-gray-200">
+            <img
+              src={logo}
+              alt={siteName || "Logo"}
+              className="h-8 w-8 rounded-full object-cover border border-gray-200"
+            />
           </div>
         )}
 

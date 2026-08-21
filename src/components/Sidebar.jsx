@@ -369,18 +369,13 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
       className={`fixed inset-y-0 left-0 z-40 flex w-56 min-h-screen flex-shrink-0 flex-col overflow-y-auto transition-transform duration-200 md:static md:z-auto md:translate-x-0 ${
         mobileOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
-      style={{ background: '#ffffff' }}
+      style={{ background: '#e8eef7' }}
     >
       {/* Logo */}
       <div className="flex items-center gap-2 px-4 py-4 border-b border-gray-200 flex-shrink-0">
         {currentLogo && (
           <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white ring-1 ring-gray-200">
             <img src={currentLogo} alt={siteName || 'Logo'} className="h-10 w-10 rounded-full object-cover" />
-          </div>
-        )}
-        {siteName && (
-          <div>
-            <div className="text-gray-900 font-bold text-base leading-tight">{siteName}</div>
           </div>
         )}
         <button
