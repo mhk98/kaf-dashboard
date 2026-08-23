@@ -1,13 +1,17 @@
 export const DEFAULT_ORDER_STATUSES = [
-  { key: 'pending', label: 'Pending', color: '#4d4943', className: 'bg-brand-600 text-white' },
-  { key: 'packaging', label: 'Packaging', color: '#6f6a63', className: 'bg-brand-500 text-white' },
-  { key: 'confirmed', label: 'Confirmed', color: '#33302c', className: 'bg-brand-700 text-white' },
-  { key: 'cancelled', label: 'Cancelled', color: '#ef4444', className: 'bg-red-500 text-white' },
-  { key: 'returned', label: 'Returned', color: '#f59e0b', className: 'bg-amber-500 text-white' },
-  { key: 'on_hold', label: 'On Hold', color: '#6b7280', className: 'bg-gray-400 text-white' },
-  { key: 'in_courier', label: 'In Courier', color: '#201f1d', className: 'bg-brand-800 text-white' },
-  { key: 'delivered', label: 'Delivered', color: '#22c55e', className: 'bg-green-500 text-white' },
   { key: 'incomplete', label: 'Incomplete', color: '#f97316', className: 'bg-orange-500 text-white' },
+  { key: 'pending', label: 'Pending', color: '#4d4943', className: 'bg-brand-600 text-white' },
+  { key: 'cancelled', label: 'Cancelled', color: '#ef4444', className: 'bg-red-500 text-white' },
+  { key: 'on_hold', label: 'On Hold', color: '#6b7280', className: 'bg-gray-400 text-white' },
+  { key: 'confirmed', label: 'Confirmed', color: '#33302c', className: 'bg-brand-700 text-white' },
+  { key: 'packaging', label: 'Packaging', color: '#6f6a63', className: 'bg-brand-500 text-white' },
+  { key: 'sent_to_courier', label: 'Sent to Courier', color: '#2563eb', className: 'bg-blue-600 text-white' },
+  { key: 'courier_in_review', label: 'In Review', color: '#6366f1', className: 'bg-indigo-500 text-white' },
+  { key: 'courier_pending', label: 'Pending', color: '#eab308', className: 'bg-yellow-500 text-white' },
+  { key: 'courier_cancelled_returned', label: 'Cancelled (Returned)', color: '#ef4444', className: 'bg-red-500 text-white' },
+  { key: 'partly_delivered', label: 'Partly Delivered', color: '#14b8a6', className: 'bg-teal-500 text-white' },
+  { key: 'delivered', label: 'Delivered', color: '#22c55e', className: 'bg-green-500 text-white' },
+  { key: 'approval_pending_payment', label: 'Approval Pending (Payment)', color: '#f59e0b', className: 'bg-amber-500 text-white' },
 ];
 
 const PALETTE = [

@@ -75,7 +75,7 @@ function toId(value) {
 // Build tracking timeline from order status
 function buildTracking(order, statuses) {
   const allSteps = statuses.map((status) => status.key);
-  const specialEnd = ["cancelled", "returned", "incomplete", "on_hold"];
+  const specialEnd = ["cancelled", "courier_cancelled_returned", "incomplete", "on_hold"];
   const statusByKey = Object.fromEntries(
     statuses.map((status) => [status.key, status]),
   );

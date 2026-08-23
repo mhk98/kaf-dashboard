@@ -3025,8 +3025,8 @@ function OrderRow({
             {statusLabel}
           </span>
         )}
-        {order.status === "in_courier" && (
-          <div className="text-[10px] text-indigo-500 mt-0.5">In Transit</div>
+        {["sent_to_courier", "courier_in_review", "courier_pending", "partly_delivered", "approval_pending_payment"].includes(statusKey) && (
+          <div className="text-[10px] text-indigo-500 mt-0.5">Courier Status</div>
         )}
       </td>
 

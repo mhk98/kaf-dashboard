@@ -4,10 +4,10 @@ const fmt = (n) => Number(n || 0).toLocaleString('en-BD');
 
 export default function DonutChart({ ordersByStatus = [], summary = {}, loading }) {
   const delivered   = ordersByStatus.find((o) => o.status === 'delivered')   || {};
-  const returned    = ordersByStatus.find((o) => o.status === 'returned')    || {};
+  const returned    = ordersByStatus.find((o) => o.status === 'courier_cancelled_returned') || {};
   const allRow      = ordersByStatus.find((o) => o.status === 'all')         || {};
 
-  const processingStatuses = ['pending','packaging','confirmed','in_courier','on_hold','incomplete'];
+  const processingStatuses = ['pending','packaging','confirmed','sent_to_courier','courier_in_review','courier_pending','partly_delivered','approval_pending_payment','on_hold','incomplete'];
   const processingPct = processingStatuses.reduce(
     (s, k) => s + (ordersByStatus.find((o) => o.status === k)?.percent || 0), 0
   );

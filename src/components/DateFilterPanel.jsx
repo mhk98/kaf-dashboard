@@ -3,7 +3,7 @@ import { SectionHeader } from './OrderSummary';
 
 const fmt = (n) => Number(n || 0).toLocaleString('en-BD');
 
-const FILTER_STATUS = ['confirmed', 'packaging', 'in_courier', 'delivered', 'cancelled', 'returned'];
+const FILTER_STATUS = ['confirmed', 'packaging', 'sent_to_courier', 'courier_in_review', 'courier_pending', 'courier_cancelled_returned', 'partly_delivered', 'delivered', 'approval_pending_payment', 'cancelled'];
 
 export default function DateFilterPanel({ onFilterChange, filteredData, loading }) {
   const today = new Date().toISOString().slice(0, 10);

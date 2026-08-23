@@ -19,31 +19,42 @@ import { normalizeOrderStatuses } from '../utils/orderStatuses';
 import { cacheService } from '../services/cacheService';
 import { useAuth } from '../context/AuthContext';
 import { getPermissionSet, hasAnyPermission, hasPermission } from '../utils/permissions';
+import { NavLink, useNavigate } from 'react-router-dom';
+
+const menuPath = (section, item) => `/${section}/${String(item).replaceAll('_', '-')}`;
 
 // ── Orders submenu ──────────────────────────────────────────
 const orderSubMenuItems = [
   { key: 'all', label: 'All Orders', icon: List, color: 'text-cyan-400' },
-  { key: 'pending', label: 'Pending', icon: Clock, color: 'text-blue-400' },
-  { key: 'packaging', label: 'Packaging', icon: Box, color: 'text-purple-400' },
-  { key: 'confirmed', label: 'Confirmed', icon: CheckCircle, color: 'text-teal-400' },
-  { key: 'cancelled', label: 'Cancelled', icon: XCircle, color: 'text-red-400' },
-  { key: 'returned', label: 'Returned', icon: RotateCcw, color: 'text-amber-400' },
-  { key: 'on_hold', label: 'On Hold', icon: PauseCircle, color: 'text-gray-400' },
-  { key: 'in_courier', label: 'In Courier', icon: Send, color: 'text-indigo-400' },
-  { key: 'delivered', label: 'Delivered', icon: CheckSquare, color: 'text-green-400' },
   { key: 'incomplete', label: 'Incomplete', icon: AlertCircle, color: 'text-orange-400' },
+  { key: 'pending', label: 'Pending', icon: Clock, color: 'text-blue-400' },
+  { key: 'cancelled', label: 'Cancelled', icon: XCircle, color: 'text-red-400' },
+  { key: 'on_hold', label: 'On Hold', icon: PauseCircle, color: 'text-gray-400' },
+  { key: 'confirmed', label: 'Confirmed', icon: CheckCircle, color: 'text-teal-400' },
+  { key: 'packaging', label: 'Packaging', icon: Box, color: 'text-purple-400' },
+  { key: 'sent_to_courier', label: 'Sent to Courier', icon: Send, color: 'text-blue-500' },
+  { key: 'courier_in_review', label: 'In Review', icon: Activity, color: 'text-indigo-400' },
+  { key: 'courier_pending', label: 'Pending', icon: Clock, color: 'text-yellow-500' },
+  { key: 'courier_cancelled_returned', label: 'Cancelled (Returned)', icon: RotateCcw, color: 'text-red-500' },
+  { key: 'partly_delivered', label: 'Partly Delivered', icon: CheckSquare, color: 'text-teal-500' },
+  { key: 'delivered', label: 'Delivered', icon: CheckSquare, color: 'text-green-400' },
+  { key: 'approval_pending_payment', label: 'Approval Pending (Payment)', icon: Wallet, color: 'text-amber-500' },
 ];
 
 const ORDER_STATUS_ICONS = {
-  pending: Clock,
-  packaging: Box,
-  confirmed: CheckCircle,
-  cancelled: XCircle,
-  returned: RotateCcw,
-  on_hold: PauseCircle,
-  in_courier: Send,
-  delivered: CheckSquare,
   incomplete: AlertCircle,
+  pending: Clock,
+  cancelled: XCircle,
+  on_hold: PauseCircle,
+  confirmed: CheckCircle,
+  packaging: Box,
+  sent_to_courier: Send,
+  courier_in_review: Activity,
+  courier_pending: Clock,
+  courier_cancelled_returned: RotateCcw,
+  partly_delivered: CheckSquare,
+  delivered: CheckSquare,
+  approval_pending_payment: Wallet,
 };
 
 const ORDER_STATUS_ICON_COLORS = [
@@ -170,6 +181,7 @@ const productSubMenuItems = [
 
 export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onOrderStatusChange, orderCounts = {}, activeProductPage, onProductPageChange, activeSupplierPage, onSupplierPageChange, activePurchasePage, onPurchasePageChange, activeLandingPage, onLandingPageChange, activeAdminPage, onAdminPageChange, activeCustomersPage, onCustomersPageChange, activeWebsitePage, onWebsitePageChange, activeApiPage, onApiPageChange, activeMarketingPage, onMarketingPageChange, activeBlogsPage, onBlogsPageChange, activeBannerPage, onBannerPageChange, activeExpensePage, onExpensePageChange, activeReportsPage, onReportsPageChange, siteSettings: externalSiteSettings, mobileOpen = false, onMobileClose }) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [siteSettings, setSiteSettings] = useState(externalSiteSettings || null);
   const [dynamicOrderStatuses, setDynamicOrderStatuses] = useState(() => normalizeOrderStatuses());
   const [ordersOpen, setOrdersOpen] = useState(activePage === 'orders');
@@ -187,6 +199,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
   const [expenseOpen, setExpenseOpen] = useState(activePage === 'expense');
   const [reportsOpen, setReportsOpen] = useState(activePage === 'reports');
   const [cacheClearing, setCacheClearing] = useState(false);
+
   const currentSettings = externalSiteSettings || siteSettings;
   const currentLogo = getLogo(currentSettings);
   const siteName = getSiteName(currentSettings);
@@ -265,7 +278,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
   function handleOrdersClick() {
     const next = !ordersOpen;
     setOrdersOpen(next);
-    if (next) { onNavigate('orders'); onOrderStatusChange('all'); }
+    if (next) { navigate('/orders/all'); onNavigate('orders'); onOrderStatusChange('all'); }
   }
 
   function handleOrderSub(key) { onNavigate('orders'); onOrderStatusChange(key); }
@@ -273,7 +286,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
   function handleProductsClick() {
     const next = !productsOpen;
     setProductsOpen(next);
-    if (next) { onNavigate('products'); onProductPageChange('product_manage'); }
+    if (next) { navigate('/products/product-manage'); onNavigate('products'); onProductPageChange('product_manage'); }
   }
 
   function handleProductSub(key) { onNavigate('products'); onProductPageChange(key); }
@@ -281,7 +294,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
   function handleSupplierClick() {
     const next = !supplierOpen;
     setSupplierOpen(next);
-    if (next) { onNavigate('supplier'); onSupplierPageChange('supplier_list'); }
+    if (next) { navigate('/supplier/supplier-list'); onNavigate('supplier'); onSupplierPageChange('supplier_list'); }
   }
 
   function handleSupplierSub(key) { onNavigate('supplier'); onSupplierPageChange(key); }
@@ -289,7 +302,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
   function handlePurchaseClick() {
     const next = !purchaseOpen;
     setPurchaseOpen(next);
-    if (next) { onNavigate('purchase'); onPurchasePageChange('purchase_list'); }
+    if (next) { navigate('/purchase/purchase-list'); onNavigate('purchase'); onPurchasePageChange('purchase_list'); }
   }
 
   function handlePurchaseSub(key) { onNavigate('purchase'); onPurchasePageChange(key); }
@@ -297,70 +310,70 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
   function handleLandingClick() {
     const next = !landingOpen;
     setLandingOpen(next);
-    if (next) { onNavigate('landing'); onLandingPageChange(filteredLandingPageSubMenuItems[0]?.key || 'landing_create'); }
+    if (next) { const key = filteredLandingPageSubMenuItems[0]?.key || 'landing_create'; navigate(menuPath('landing', key)); onNavigate('landing'); onLandingPageChange(key); }
   }
   function handleLandingSub(key) { onNavigate('landing'); onLandingPageChange(key); }
 
   function handleAdminClick() {
     const next = !adminOpen;
     setAdminOpen(next);
-    if (next) { onNavigate('admin'); onAdminPageChange(filteredAdminSubMenuItems[0]?.key || 'admin_user'); }
+    if (next) { const key = filteredAdminSubMenuItems[0]?.key || 'admin_user'; navigate(menuPath('admin', key)); onNavigate('admin'); onAdminPageChange(key); }
   }
   function handleAdminSub(key) { onNavigate('admin'); onAdminPageChange(key); }
 
   function handleCustomersClick() {
     const next = !customersOpen;
     setCustomersOpen(next);
-    if (next) { onNavigate('customers'); onCustomersPageChange(filteredCustomersSubMenuItems[0]?.key || 'customer_list'); }
+    if (next) { const key = filteredCustomersSubMenuItems[0]?.key || 'customer_list'; navigate(menuPath('customers', key)); onNavigate('customers'); onCustomersPageChange(key); }
   }
   function handleCustomersSub(key) { onNavigate('customers'); onCustomersPageChange(key); }
 
   function handleWebsiteClick() {
     const next = !websiteOpen;
     setWebsiteOpen(next);
-    if (next) { onNavigate('website'); onWebsitePageChange('general_setting'); }
+    if (next) { navigate('/website/general-setting'); onNavigate('website'); onWebsitePageChange('general_setting'); }
   }
   function handleWebsiteSub(key) { onNavigate('website'); onWebsitePageChange(key); }
 
   function handleApiClick() {
     const next = !apiOpen;
     setApiOpen(next);
-    if (next) { onNavigate('api'); onApiPageChange('courier_api'); }
+    if (next) { navigate('/api/courier-api'); onNavigate('api'); onApiPageChange('courier_api'); }
   }
   function handleApiSub(key) { onNavigate('api'); onApiPageChange(key); }
 
   function handleMarketingClick() {
     const next = !marketingOpen;
     setMarketingOpen(next);
-    if (next) { onNavigate('marketing'); onMarketingPageChange('tag_manager'); }
+    if (next) { navigate('/marketing/tag-manager'); onNavigate('marketing'); onMarketingPageChange('tag_manager'); }
   }
   function handleMarketingSub(key) { onNavigate('marketing'); onMarketingPageChange(key); }
 
   function handleBlogsClick() {
     const next = !blogsOpen;
     setBlogsOpen(next);
-    if (next) { onNavigate('blogs'); onBlogsPageChange('blog'); }
+    if (next) { navigate('/blogs/blog'); onNavigate('blogs'); onBlogsPageChange('blog'); }
   }
   function handleBlogsSub(key) { onNavigate('blogs'); onBlogsPageChange(key); }
 
   function handleBannerClick() {
     const next = !bannerOpen;
     setBannerOpen(next);
-    if (next) { onNavigate('banner'); onBannerPageChange('banner_category'); }
+    if (next) { navigate('/banner/banner-category'); onNavigate('banner'); onBannerPageChange('banner_category'); }
   }
   function handleBannerSub(key) { onNavigate('banner'); onBannerPageChange(key); }
 
   function handleExpenseClick() {
     const next = !expenseOpen;
     setExpenseOpen(next);
-    if (next) { onNavigate('expense'); onExpensePageChange('expense_categories'); }
+    if (next) { navigate('/expense/expense-categories'); onNavigate('expense'); onExpensePageChange('expense_categories'); }
   }
   function handleExpenseSub(key) { onNavigate('expense'); onExpensePageChange(key); }
 
   function handleReportsClick() {
     const next = !reportsOpen;
     setReportsOpen(next);
-    if (next) { onNavigate('reports'); onReportsPageChange('stock_report'); }
+    if (next) { navigate('/reports/stock-report'); onNavigate('reports'); onReportsPageChange('stock_report'); }
   }
   function handleReportsSub(key) { onNavigate('reports'); onReportsPageChange(key); }
 
@@ -391,7 +404,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
       <nav className="py-2 flex-1">
         {/* Dashboard */}
         {hasPermission(permissionSet, 'dashboard') && (
-          <SidebarItem icon={LayoutDashboard} label="Dashboard" active={activePage === 'dashboard'} onClick={() => onNavigate('dashboard')} />
+          <SidebarItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" active={activePage === 'dashboard'} onClick={() => onNavigate('dashboard')} />
         )}
 
         {/* ── Orders ── */}
@@ -412,6 +425,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               color={item.color}
               badge={orderCounts[item.key] ?? 0}
               isActive={activePage === 'orders' && activeOrderStatus === item.key}
+              to={menuPath('orders', item.key)}
               onClick={() => handleOrderSub(item.key)}
             />
           ))}
@@ -434,6 +448,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'products' && activeProductPage === item.key}
+              to={menuPath('products', item.key)}
               onClick={() => handleProductSub(item.key)}
             />
           ))}
@@ -456,6 +471,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'supplier' && activeSupplierPage === item.key}
+              to={menuPath('supplier', item.key)}
               onClick={() => handleSupplierSub(item.key)}
             />
           ))}
@@ -477,6 +493,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'purchase' && activePurchasePage === item.key}
+              to={menuPath('purchase', item.key)}
               onClick={() => handlePurchaseSub(item.key)}
             />
           ))}
@@ -498,6 +515,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'landing' && activeLandingPage === item.key}
+              to={menuPath('landing', item.key)}
               onClick={() => handleLandingSub(item.key)}
             />
           ))}
@@ -520,6 +538,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'admin' && activeAdminPage === item.key}
+              to={menuPath('admin', item.key)}
               onClick={() => handleAdminSub(item.key)}
             />
           ))}
@@ -541,6 +560,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'customers' && activeCustomersPage === item.key}
+              to={menuPath('customers', item.key)}
               onClick={() => handleCustomersSub(item.key)}
             />
           ))}
@@ -563,6 +583,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'website' && activeWebsitePage === item.key}
+              to={menuPath('website', item.key)}
               onClick={() => handleWebsiteSub(item.key)}
             />
           ))}
@@ -585,6 +606,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'api' && activeApiPage === item.key}
+              to={menuPath('api', item.key)}
               onClick={() => handleApiSub(item.key)}
             />
           ))}
@@ -606,6 +628,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'marketing' && activeMarketingPage === item.key}
+              to={menuPath('marketing', item.key)}
               onClick={() => handleMarketingSub(item.key)}
             />
           ))}
@@ -628,6 +651,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'blogs' && activeBlogsPage === item.key}
+              to={menuPath('blogs', item.key)}
               onClick={() => handleBlogsSub(item.key)}
             />
           ))}
@@ -650,6 +674,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'banner' && activeBannerPage === item.key}
+              to={menuPath('banner', item.key)}
               onClick={() => handleBannerSub(item.key)}
             />
           ))}
@@ -671,6 +696,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'expense' && activeExpensePage === item.key}
+              to={menuPath('expense', item.key)}
               onClick={() => handleExpenseSub(item.key)}
             />
           ))}
@@ -693,6 +719,7 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
               label={item.label}
               color={item.color}
               isActive={activePage === 'reports' && activeReportsPage === item.key}
+              to={menuPath('reports', item.key)}
               onClick={() => handleReportsSub(item.key)}
             />
           ))}
@@ -737,9 +764,10 @@ function ExpandableItem({ icon: Icon, label, isOpen, isActive, badge, onClick, c
   );
 }
 
-function SubItem({ icon: Icon, label, color, badge, isActive, onClick }) {
+function SubItem({ icon: Icon, label, color, badge, isActive, onClick, to }) {
   return (
-    <div
+    <NavLink
+      to={to}
       onClick={onClick}
       className={`flex items-center justify-between px-3 py-2 cursor-pointer transition-all duration-100 ${
         isActive ? 'bg-gray-200 text-gray-950' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-950'
@@ -754,13 +782,15 @@ function SubItem({ icon: Icon, label, color, badge, isActive, onClick }) {
           {badge}
         </span>
       )}
-    </div>
+    </NavLink>
   );
 }
 
-function SidebarItem({ icon: Icon, label, active, hasChild, onClick }) {
+function SidebarItem({ icon: Icon, label, active, hasChild, onClick, to }) {
+  const Component = to ? NavLink : 'div';
   return (
-    <div
+    <Component
+      {...(to ? { to } : {})}
       onClick={onClick}
       className={`flex items-center justify-between px-4 py-2.5 cursor-pointer group transition-all duration-150 ${
         active ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-950'
@@ -771,6 +801,6 @@ function SidebarItem({ icon: Icon, label, active, hasChild, onClick }) {
         <span className="text-sm font-medium">{label}</span>
       </div>
       {hasChild && <ChevronRight size={14} className="opacity-60" />}
-    </div>
+    </Component>
   );
 }

@@ -7,10 +7,14 @@ const STATUS_LABELS = {
   packaging: 'Packaging',
   confirmed: 'Confirmed',
   cancelled: 'Cancelled',
-  returned: 'Returned',
   on_hold: 'On Hold',
-  in_courier: 'In Courier',
+  sent_to_courier: 'Sent to Courier',
+  courier_in_review: 'In Review',
+  courier_pending: 'Pending',
+  courier_cancelled_returned: 'Cancelled (Returned)',
+  partly_delivered: 'Partly Delivered',
   delivered: 'Delivered',
+  approval_pending_payment: 'Approval Pending (Payment)',
   incomplete: 'Incomplete',
 };
 

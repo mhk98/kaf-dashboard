@@ -112,6 +112,7 @@ import {
   normalizeSettingData,
 } from "./utils/siteBranding";
 import { imageUrl } from "./utils/assetUrl";
+import { useLocation } from "react-router-dom";
 import {
   getPermissionSet,
   isNavigationAllowed,
@@ -317,7 +318,10 @@ function getNavigationStateFromUrl(url) {
       return getNavigationStateFromHash(value.slice(1));
     const parsed = new URL(value, window.location.origin);
     if (parsed.origin !== window.location.origin) return null;
-    return getNavigationStateFromHash(parsed.hash.replace(/^#/, ""));
+    return (
+      getPathNavigationState(parsed.pathname) ||
+      getNavigationStateFromHash(parsed.hash.replace(/^#/, ""))
+    );
   } catch {
     return null;
   }
@@ -338,8 +342,41 @@ function getStoredNavigationState() {
 function getInitialNavigationState() {
   if (getDirectLandingPageId()) return DEFAULT_NAVIGATION;
   return (
-    getHashNavigationState() || getStoredNavigationState() || DEFAULT_NAVIGATION
+    getPathNavigationState(window.location.pathname) ||
+    getHashNavigationState() ||
+    getStoredNavigationState() ||
+    DEFAULT_NAVIGATION
   );
+}
+
+const PATH_STATE_KEYS = {
+  orders: "activeOrderStatus",
+  products: "activeProductPage",
+  supplier: "activeSupplierPage",
+  purchase: "activePurchasePage",
+  landing: "activeLandingPage",
+  admin: "activeAdminPage",
+  customers: "activeCustomersPage",
+  website: "activeWebsitePage",
+  api: "activeApiPage",
+  marketing: "activeMarketingPage",
+  blogs: "activeBlogsPage",
+  banner: "activeBannerPage",
+  expense: "activeExpensePage",
+  reports: "activeReportsPage",
+};
+
+function getPathNavigationState(pathname) {
+  const parts = String(pathname || "").split("/").filter(Boolean);
+  if (!parts.length) return null;
+  if (parts[0] === "dashboard") {
+    return normalizeNavigationState({ activePage: "dashboard" });
+  }
+  const stateKey = PATH_STATE_KEYS[parts[0]];
+  if (!stateKey) return null;
+  const state = { activePage: parts[0] };
+  if (parts[1]) state[stateKey] = parts[1].replaceAll("-", "_");
+  return normalizeNavigationState(state);
 }
 
 function writeNavigationState(state) {
@@ -420,6 +457,7 @@ async function fetchBannerState() {
 
 function App() {
   const { isAuthenticated, isLoading, user } = useAuth();
+  const location = useLocation();
   const directLandingPageId = getDirectLandingPageId();
   const initialNavigation = getInitialNavigationState();
 
@@ -585,6 +623,13 @@ function App() {
     activeExpensePage,
     activeReportsPage,
   };
+
+  /* eslint-disable react-hooks/immutability */
+  useEffect(() => {
+    const next = getPathNavigationState(location.pathname);
+    if (next) applyNavigationState(next);
+  }, [location.pathname]);
+  /* eslint-enable react-hooks/immutability */
 
   useEffect(() => {
     if (!isAuthenticated) return;
