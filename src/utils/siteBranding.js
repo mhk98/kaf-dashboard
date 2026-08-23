@@ -38,7 +38,7 @@ export function assetSrc(value) {
 
 export function getLogo(settings) {
   const data = normalizeSettingData(settings);
-  return assetSrc(data.logoFile || data.whiteLogo || data.darkLogo);
+  return assetSrc(data.logoFile || data.whiteLogo);
 }
 
 export function getFavicon(settings) {

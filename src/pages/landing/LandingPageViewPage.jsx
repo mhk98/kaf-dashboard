@@ -2881,7 +2881,6 @@ function Footer({ phone, settings, pages = [] }) {
     general.logo ||
     general.logoUrl ||
     general.logoFile ||
-    general.darkLogo ||
     general.whiteLogo ||
     "";
   const supportPhone =

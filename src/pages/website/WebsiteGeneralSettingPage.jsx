@@ -11,7 +11,7 @@ import { imageUrl } from '../../utils/assetUrl';
 const SETTING_TYPE = 'general';
 
 const DEFAULT = {
-  name: '', whiteLogo: null, darkLogo: null, faviconLogo: null,
+  name: '', whiteLogo: null, faviconLogo: null,
   logoFile: '', faviconFile: '',
   scrollText: '', metaTitle: '', metaKeyword: '', metaDescription: '',
   marqueeText: '',
@@ -28,9 +28,8 @@ const emptyStore = () => ({
 function normalizeSettings(data = {}) {
   const next = { ...DEFAULT, ...normalizeSettingData(data) };
   next.whiteLogo = next.whiteLogo || next.logoFile || null;
-  next.darkLogo = next.darkLogo || next.logoFile || null;
   next.faviconLogo = next.faviconLogo || next.faviconFile || null;
-  next.logoFile = next.logoFile || next.darkLogo || next.whiteLogo || '';
+  next.logoFile = next.logoFile || next.whiteLogo || '';
   next.faviconFile = next.faviconFile || next.faviconLogo || '';
   next.scrollText = next.scrollText || next.marqueeText || '';
   next.marqueeText = next.marqueeText || next.scrollText || '';
@@ -118,9 +117,6 @@ export default function WebsiteGeneralSettingPage() {
   function setLogo(v) {
     setForm((p) => ({ ...p, whiteLogo: v, logoFile: v }));
   }
-  function setDarkLogo(v) {
-    setForm((p) => ({ ...p, darkLogo: v, logoFile: p.logoFile || v }));
-  }
   function setFavicon(v) {
     setForm((p) => ({ ...p, faviconLogo: v, faviconFile: v }));
   }
@@ -131,7 +127,8 @@ export default function WebsiteGeneralSettingPage() {
     try {
       const payload = {
         ...form,
-        logoFile: form.logoFile || form.darkLogo || form.whiteLogo || null,
+        logoFile: form.logoFile || form.whiteLogo || null,
+        darkLogo: null,
         faviconFile: form.faviconFile || form.faviconLogo || null,
         marqueeText: form.marqueeText || form.scrollText || null,
       };
@@ -173,7 +170,6 @@ export default function WebsiteGeneralSettingPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <LogoField label="Dark Logo"    preview={form.darkLogo || form.logoFile}    onChange={setDarkLogo} />
             <LogoField label="Favicon Logo" preview={form.faviconLogo || form.faviconFile} onChange={setFavicon} />
           </div>
 
