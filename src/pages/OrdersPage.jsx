@@ -61,10 +61,12 @@ const ORDER_SOURCE_OPTIONS = [
 ];
 
 const TABLE_STATUS_UPDATE_OPTIONS = [
-  "pending",
-  "packaging",
-  "confirmed",
   "incomplete",
+  "pending",
+  "cancelled",
+  "on_hold",
+  "confirmed",
+  "packaging",
 ];
 const TABLE_STATUS_UPDATE_VIEWS = ["all", ...TABLE_STATUS_UPDATE_OPTIONS];
 
@@ -443,13 +445,13 @@ export default function OrdersPage({
     const confirmedIds = selectedCourierOrderIds;
     if (!confirmedIds.length) {
       alert(
-        "Selected orders এর মধ্যে courier এ পাঠানোর মতো confirmed order নেই",
+        "Selected orders এর মধ্যে courier এ পাঠানোর মতো packaging order নেই",
       );
       return;
     }
     if (
       !window.confirm(
-        `${confirmedIds.length} টি confirmed order Steadfast courier এ পাঠাবেন?`,
+        `${confirmedIds.length} টি packaging order Steadfast courier এ পাঠাবেন?`,
       )
     )
       return;
@@ -1950,7 +1952,7 @@ function getSteadfastInfo(order) {
 
 function canSendOrderToCourier(order) {
   return (
-    toOrderStatusKey(order?.status) === "confirmed" &&
+    toOrderStatusKey(order?.status) === "packaging" &&
     !getSteadfastInfo(order).trackingCode
   );
 }

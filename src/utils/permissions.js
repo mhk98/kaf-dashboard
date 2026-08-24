@@ -38,6 +38,7 @@ export const PAGE_PERMISSION_MAP = {
   landing: ['landing_page', 'landing_page_header', 'landing_page_footer'],
   admin: ['admin_user', 'admin_roles', 'admin_permissions'],
   customers: ['customers', 'ip_block'],
+  reseller: ['reseller'],
   website: ['website_setting'],
   api: ['api_integration'],
   marketing: ['marketing_tools'],
@@ -114,6 +115,7 @@ export const FIRST_SUBPAGE_BY_PERMISSION = {
 
 export const NAVIGATION_ORDER = [
   ['dashboard', { activePage: 'dashboard' }],
+  ['reseller', { activePage: 'reseller' }],
   ['orders', { activePage: 'orders', activeOrderStatus: 'all' }],
   ['products', { activePage: 'products', activeProductPage: 'product_manage' }],
   ['supplier', { activePage: 'supplier', activeSupplierPage: 'supplier_list' }],

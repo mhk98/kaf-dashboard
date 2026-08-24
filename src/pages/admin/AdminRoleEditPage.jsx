@@ -3,6 +3,7 @@ import { rolePermissionService } from '../../services/adminService';
 
 const FALLBACK_PERMISSIONS = [
   'dashboard',
+  'reseller',
   'orders',
   'products',
   'supplier',

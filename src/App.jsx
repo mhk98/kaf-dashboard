@@ -50,6 +50,7 @@ import CustomerEditPage from "./pages/customers/CustomerEditPage";
 import CustomerViewPage from "./pages/customers/CustomerViewPage";
 import CustomerLoginAsPage from "./pages/customers/CustomerLoginAsPage";
 import CustomerIpBlockPage from "./pages/customers/CustomerIpBlockPage";
+import ResellerListPage from "./pages/reseller/ResellerListPage";
 import LandingPageCreatePage from "./pages/landing/LandingPageCreatePage";
 import LandingPageRegularPage from "./pages/landing/LandingPageRegularPage";
 import LandingPageManagePage from "./pages/landing/LandingPageManagePage";
@@ -1835,6 +1836,9 @@ function App() {
         return <CustomerIpBlockPage />;
       }
       return <CustomerListPage />;
+    }
+    if (activePage === "reseller") {
+      return <ResellerListPage />;
     }
     if (activePage === "website") {
       if (activeWebsitePage === "general_setting")

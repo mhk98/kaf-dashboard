@@ -407,6 +407,11 @@ export default function Sidebar({ activePage, onNavigate, activeOrderStatus, onO
           <SidebarItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" active={activePage === 'dashboard'} onClick={() => onNavigate('dashboard')} />
         )}
 
+        {/* Reseller */}
+        {hasPermission(permissionSet, 'reseller') && (
+          <SidebarItem to="/reseller" icon={UserPlus} label="Reseller" active={activePage === 'reseller'} onClick={() => onNavigate('reseller')} />
+        )}
+
         {/* ── Orders ── */}
         {hasPermission(permissionSet, 'orders') && (
         <ExpandableItem
