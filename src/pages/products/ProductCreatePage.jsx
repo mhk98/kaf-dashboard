@@ -5,6 +5,7 @@ import {
 } from '../../services/productService';
 import { supplierService } from '../../services/supplierService';
 import RichEditor from '../../components/RichEditor';
+import RelatedProductsPicker from '../../components/RelatedProductsPicker';
 
 function Toggle({ checked, onChange }) {
   return (
@@ -135,6 +136,7 @@ export default function ProductCreatePage({ onNavigate }) {
   const [selectedAttributes, setSelectedAttributes] = useState([]);
   const [bulkPrice, setBulkPrice] = useState({ purchasePrice: '', oldPrice: '', newPrice: '', stock: '' });
   const [selectedSupplier, setSelectedSupplier] = useState('');
+  const [relatedProductIds, setRelatedProductIds] = useState([]);
   const [payAmount, setPayAmount] = useState('');
   const [purchaseDate, setPurchaseDate] = useState(new Date().toISOString().slice(0, 10));
 
@@ -313,6 +315,7 @@ export default function ProductCreatePage({ onNavigate }) {
           .map(({ key, colorName, discountPercent, ...v }) => v),
       ));
       imageFiles.forEach(f => fd.append('gallery_images', f));
+      fd.append('relatedProductIds', JSON.stringify(relatedProductIds));
 
       const { apiRequest } = await import('../../utils/apiClient');
       await apiRequest('/product/create', { method: 'POST', body: fd });
@@ -477,6 +480,14 @@ export default function ProductCreatePage({ onNavigate }) {
             ))}
           </div>
         )}
+      </SectionCard>
+
+      {/* Related / Similar Products */}
+      <SectionCard title="Related Products (Similar)">
+        <RelatedProductsPicker
+          value={relatedProductIds}
+          onChange={setRelatedProductIds}
+        />
       </SectionCard>
 
       {/* Price & Variation */}

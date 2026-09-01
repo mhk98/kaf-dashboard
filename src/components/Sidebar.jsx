@@ -10,7 +10,7 @@ import {
   Ban, SlidersHorizontal, Share2, Phone, Truck as TruckIcon, CircleDot, FilePlus,
   Bike, Banknote, MessageSquare, ShieldAlert,
   Cpu, Ticket, LayoutGrid, Activity, FileText, Folder, TrendingUp,
-  PanelBottom, PanelTop,
+  PanelBottom, PanelTop, Building2,
   X,
 } from 'lucide-react';
 import { orderStatusService, siteSettingService } from '../services/websiteService';
@@ -105,6 +105,7 @@ const websiteSettingSubMenuItems = [
   { key: 'order_block',      label: 'Order Block',      icon: ShieldAlert,       color: 'text-red-400'    },
   { key: 'website_footer',   label: 'Footer',           icon: PanelBottom,       color: 'text-amber-400'  },
   { key: 'social_media',     label: 'Social Media',     icon: Share2,            color: 'text-pink-400'   },
+  { key: 'clients',          label: 'Client',           icon: Building2,         color: 'text-indigo-400' },
   { key: 'floating_contact', label: 'Floating Contact', icon: MessageSquare,      color: 'text-cyan-400'   },
   { key: 'contact',          label: 'Contact',          icon: Phone,             color: 'text-green-400'  },
   { key: 'shipping_charge',  label: 'Shipping Charge',  icon: TruckIcon,         color: 'text-amber-400'  },

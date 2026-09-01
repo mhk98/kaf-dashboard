@@ -11,6 +11,7 @@ import {
 } from "../../services/productService";
 import { supplierService } from "../../services/supplierService";
 import RichEditor from "../../components/RichEditor";
+import RelatedProductsPicker from "../../components/RelatedProductsPicker";
 import { apiRequest } from "../../utils/apiClient";
 import { imageUrl } from "../../utils/assetUrl";
 
@@ -181,6 +182,11 @@ export default function ProductEditPage({ product, onNavigate }) {
     initVariations.find((variation) => variation.attribute)?.attribute || "",
   );
   const [selectedSupplier, setSelectedSupplier] = useState("");
+  const [relatedProductIds, setRelatedProductIds] = useState(
+    Array.isArray(product?.relatedProductIds)
+      ? product.relatedProductIds.map(Number).filter(Boolean)
+      : [],
+  );
   const [payAmount, setPayAmount] = useState("");
   const [purchaseDate, setPurchaseDate] = useState(new Date().toISOString().slice(0, 10));
 
@@ -351,6 +357,7 @@ export default function ProductEditPage({ product, onNavigate }) {
         ),
       );
       newImageFiles.forEach((f) => fd.append("gallery_images", f));
+      fd.append("relatedProductIds", JSON.stringify(relatedProductIds));
 
       await apiRequest(`/product/${product.Id}`, { method: "PUT", body: fd });
       alert("Product updated successfully!");
@@ -649,6 +656,15 @@ export default function ProductEditPage({ product, onNavigate }) {
             ))}
           </div>
         )}
+      </SectionCard>
+
+      {/* Related / Similar Products */}
+      <SectionCard title="Related Products (Similar)">
+        <RelatedProductsPicker
+          value={relatedProductIds}
+          onChange={setRelatedProductIds}
+          excludeId={product?.Id}
+        />
       </SectionCard>
 
       {/* Price & Variation */}

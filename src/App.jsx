@@ -70,6 +70,8 @@ import WebsiteOrderStatusPage from "./pages/website/WebsiteOrderStatusPage";
 import WebsiteOrderStatusEditPage from "./pages/website/WebsiteOrderStatusEditPage";
 import WebsitePageManagePage from "./pages/website/WebsitePageManagePage";
 import WebsitePageEditPage from "./pages/website/WebsitePageEditPage";
+import WebsiteClientsPage from "./pages/website/WebsiteClientsPage";
+import WebsiteClientEditPage from "./pages/website/WebsiteClientEditPage";
 import CourierApiPage from "./pages/api/CourierApiPage";
 import PaymentGatewayPage from "./pages/api/PaymentGatewayPage";
 import SmsGatewayPage from "./pages/api/SmsGatewayPage";
@@ -233,6 +235,9 @@ const TRANSIENT_SUBPAGE_FALLBACKS = {
   activeExpensePage: {
     expense_category_edit: "expense_categories",
     expense_edit: "expense",
+  },
+  activeWebsitePage: {
+    client_edit: "clients",
   },
 };
 
@@ -531,6 +536,7 @@ function App() {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedShippingCharge, setSelectedShippingCharge] = useState(null);
   const [selectedOrderStatus, setSelectedOrderStatus] = useState(null);
+  const [selectedClient, setSelectedClient] = useState(null);
   const [selectedPage, setSelectedPage] = useState(null);
   const [tagManagers, setTagManagers] = useState([]);
   const [selectedTagManager, setSelectedTagManager] = useState(null);
@@ -1847,6 +1853,31 @@ function App() {
       if (activeWebsitePage === "website_footer") return <WebsiteFooterPage />;
       if (activeWebsitePage === "social_media")
         return <WebsiteSocialMediaPage />;
+      if (activeWebsitePage === "clients") {
+        return (
+          <WebsiteClientsPage
+            onEdit={(c) => {
+              setSelectedClient(c);
+              setActiveWebsitePage("client_edit");
+            }}
+            onCreate={() => {
+              setSelectedClient(null);
+              setActiveWebsitePage("client_edit");
+            }}
+          />
+        );
+      }
+      if (activeWebsitePage === "client_edit") {
+        return (
+          <WebsiteClientEditPage
+            client={selectedClient}
+            onNavigate={(pg) => {
+              setSelectedClient(null);
+              setActiveWebsitePage(pg);
+            }}
+          />
+        );
+      }
       if (activeWebsitePage === "floating_contact")
         return <WebsiteFloatingContactPage />;
       if (activeWebsitePage === "contact") return <WebsiteContactPage />;
